@@ -39,7 +39,7 @@ TAILS_BACK = [(22, 37), (47, 62), (72, 87)]   # Zinken Rueckwand (angenommen)
 TAILS_FRONT = [(8, 20), (28, 40)]             # Zinken Seite->Griffleiste
 
 doc = ezdxf.new("R2010", setup=True, units=4)  # mm
-doc.header["$LTSCALE"] = 0.5
+doc.header["$LTSCALE"] = 1.0
 doc.header["$MEASUREMENT"] = 1
 doc.header["$LIMMIN"] = (0, 0)
 doc.header["$LIMMAX"] = (420, 297)
@@ -47,14 +47,19 @@ doc.header["$EXTMIN"] = (0, 0, 0)
 doc.header["$EXTMAX"] = (420, 297, 0)
 msp = doc.modelspace()
 
+# Linientypen nach ISO 128 fuer Linienbreite 0,25 mm (Werte in mm, LTSCALE 1)
+doc.linetypes.add("ISO_VERDECKT", pattern=[4.0, 3.0, -1.0], description="Strichlinie __ __ __")
+doc.linetypes.add("ISO_STRICHPUNKT", pattern=[8.5, 6.0, -1.0, 0.5, -1.0],
+                  description="Strichpunktlinie ____ . ____ .")
+
 LAYERS = {
     # name: (farbe, linienstaerke 1/100 mm, linientyp)
     "Rahmen": (7, 70, "Continuous"),
     "Kontur": (7, 50, "Continuous"),
     "Duenn": (8, 25, "Continuous"),
-    "Verdeckt": (6, 25, "DASHED"),
-    "Mittellinie": (1, 25, "CENTER"),
-    "Schnittverlauf": (1, 50, "CENTER"),
+    "Verdeckt": (6, 25, "ISO_VERDECKT"),
+    "Mittellinie": (1, 25, "ISO_STRICHPUNKT"),
+    "Schnittverlauf": (1, 70, "Continuous"),
     "Schraffur": (8, 18, "Continuous"),
     "Bemassung": (3, 25, "Continuous"),
     "Text": (7, 25, "Continuous"),
@@ -110,15 +115,15 @@ def hatch(paths, scale=1.2, angle=0.0):
     return h
 
 
-def dim(p1, p2, base, txt, angle=0):
-    d = msp.add_linear_dim(base=base, p1=p1, p2=p2, angle=angle, text=txt,
+def dim(p1, p2, base, txt, angle=0, loc=None):
+    d = msp.add_linear_dim(base=base, p1=p1, p2=p2, angle=angle, text=txt, location=loc,
                            dimstyle="TISCHLER", dxfattribs={"layer": "Bemassung"})
     d.render()
 
 
 def arrowhead(tip, frm, size=2.5, layer="Bemassung"):
     ang = math.atan2(tip[1] - frm[1], tip[0] - frm[0])
-    w = size * 0.18
+    w = size * 0.3
     bx, by = tip[0] - size * math.cos(ang), tip[1] - size * math.sin(ang)
     nx, ny = -math.sin(ang) * w, math.cos(ang) * w
     msp.add_solid([tip, (bx + nx, by + ny), (bx - nx, by - ny)], dxfattribs={"layer": layer})
@@ -269,7 +274,7 @@ dim(PA(0, 0), PA(0, H), (AX0 - 14, 0), "100", angle=90)
 dim(PA(0, 0), PA(0, BZ1), (AX0 - 7, 0), "17", angle=90)
 
 leader([PA(GX1 - 0.9, GZ1 - 0.9), PA(GX1 + 4, GZ1 + 4), PA(GX1 + 6, GZ1 + 4)], "R3")
-leader([PA(T - 1, RZ1 - 1), PA(T + 6, RZ1 + 3), PA(T + 9, RZ1 + 3)], "Fase 2x45°")
+leader([PA(T - 1, RZ1 - 1), PA(T + 7, RZ1 - 7), PA(T + 10, RZ1 - 7)], "Fase 2x45°")
 leader([PA(4, 1.8), PA(9, -4), PA(12, -4)], "Fase 3x10")
 leader([PA(sx + 1.5, 26), PA(T + 12, 45), PA(T + 15, 45)], "3x16 DIN 97-St")
 text("A - A", PA(48, 60), h=5, align="MIDDLE_CENTER")
@@ -324,16 +329,15 @@ screws_y = [BY0 + 40, BY0 + 40 + 78.5, BY0 + 40 + 157]
 for y in (screws_y[0], screws_y[2]):
     line(PB(y, 4), PB(y, 36), "Mittellinie")
 pline([PB(screws_y[0], 33), PB(screws_y[0] + 8, 41), PB(screws_y[2] - 3, 41), PB(screws_y[2], 33)], "Bemassung")
-mid = (PB(screws_y[0] + 8, 0)[0] + PB(screws_y[2] - 3, 0)[0]) / 2
-text("3x16 DIN 97-St", (mid, BZ0P + 41.8), align="BOTTOM_CENTER")
+text("3x16 DIN 97-St", PB(screws_y[0] + 10, 41.8), align="BOTTOM_LEFT")
 
 for y in (B_L1, B_R):
     break_line(PB(y, 0)[0] + (1.5 if y == B_L1 else -1.5), BZ0P - 2, BZ0P + H + 2)
 
 # Bemassung B-B
 dim(PB(LIP, H), PB(B - LIP, H), (0, BZ0P + 110), "242 (Prüfmaß)")
-dim(PB(B - T, H - FALZ_T), PB(B - LIP, H), (0, BZ0P + 105), "7,5")
-dim(PB(B - LIP, H), PB(B, H), (0, BZ0P + 105), "(6,5)")
+dim(PB(B - T, H - FALZ_T), PB(B - LIP, H), (0, BZ0P + 105), "7,5", loc=(PB(B - T, 0)[0] - 3.5, BZ0P + 106.5))
+dim(PB(B - LIP, H), PB(B, H), (0, BZ0P + 105), "(6,5)", loc=(PB(B, 0)[0] + 5, BZ0P + 106.5))
 dim(PB(T, H - FALZ_T), PB(LIP, H), (PB(22, 0)[0], 0), "5", angle=90)
 dim(PB(T - ZAPF, 0), PB(0, ZAPF_H), (BX0 - 6, 0), "6", angle=90)
 dim(PB(T, 0), PB(30, BZ1), (PB(34, 0)[0], 0), "17", angle=90)
@@ -429,8 +433,38 @@ def build_model():
 MODEL = build_model()
 
 
+def merge_collinear(lines, tol=0.05):
+    """Fasst Teilstuecke auf derselben Geraden zu durchgehenden Linien zusammen."""
+    groups = {}
+    for u0, w0, u1, w1 in lines:
+        L = math.hypot(u1 - u0, w1 - w0)
+        if L < 1e-9:
+            continue
+        ang = math.atan2(w1 - w0, u1 - u0) % math.pi
+        if ang > math.pi - 1e-6:
+            ang = 0.0
+        c, s_ = math.cos(ang), math.sin(ang)
+        off = -u0 * s_ + w0 * c
+        t0, t1 = sorted((u0 * c + w0 * s_, u1 * c + w1 * s_))
+        key = (round(ang, 4), round(off / tol))
+        groups.setdefault(key, (ang, off, []))[2].append((t0, t1))
+    out = []
+    for ang, off, iv in groups.values():
+        c, s_ = math.cos(ang), math.sin(ang)
+        iv.sort()
+        cur = list(iv[0])
+        for t0, t1 in iv[1:] + [(math.inf, math.inf)]:
+            if t0 <= cur[1] + tol:
+                cur[1] = max(cur[1], t1)
+            else:
+                a, b = cur
+                out.append((a * c - off * s_, a * s_ + off * c, b * c - off * s_, b * s_ + off * c))
+                cur = [t0, t1]
+    return out
+
+
 def draw_view(prisms, view, right, up, ox, oy, scale=0.2, layer="Kontur"):
-    lines = hlr.render(prisms, view, right, up, step=1.0)
+    lines = merge_collinear(hlr.render(prisms, view, right, up, step=1.0))
     for u0, w0, u1, w1 in lines:
         if math.hypot(u1 - u0, w1 - w0) < 0.5:
             continue
@@ -455,7 +489,7 @@ FVX, FVY = 243, 255
 draw_view(MODEL, (1, 0, 0), (0, 1, 0), (0, 0, 1), FVX, FVY)
 dim((FVX, FVY), (FVX + B * s, FVY), (0, FVY - 21), "255")
 dim((FVX + B * s, FVY), (FVX + B * s, FVY + H * s), (FVX + B * s + 9, 0), "100", angle=90)
-section_mark(FVX + B / 2 * s, FVY + H * s + 3, FVY - 3, "A")
+section_mark(FVX + B / 2 * s, FVY + H * s + 3, FVY - 3, "A", direction=1)
 
 # Seitenansicht, rechts = +x
 SVX, SVY = 320, 257
@@ -517,7 +551,7 @@ tt("KI", 107, 49.2, h=2.5)
 for i in range(1, 9):
     tl(0, 5 * i, 56, 5 * i, "Duenn")
 for x in (8, 30, 44):
-    tl(x, 0, x, 45, "Duenn")
+    tl(x, 0, x, 48, "Duenn")
 tt("Zust.", 0.8, 1.4)
 tt("Änderung", 9, 1.4)
 tt("Datum", 31, 1.4)
@@ -531,7 +565,7 @@ tt("Datum", 72, 41.5)
 tt("Name", 89, 41.5)
 tt("Bearb.", 57, 35.5)
 tt("Gepr.", 57, 29.5)
-tt("Norm", 57, 23.5)
+tt("Norm.", 57, 23.5)
 tt("01.10.2026", 71, 35.5, h=1.6)
 tl(56, 5, 104, 5)
 pline([(TX + 58, TY + 8), (TX + 70, TY + 8), (TX + 70, TY + 19), (TX + 58, TY + 19)], "Schriftfeld", closed=True)
