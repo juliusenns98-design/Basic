@@ -1,6 +1,6 @@
 """Isometrie (DIN ISO 5456-3, unverkuerzt) des Mittelstufenprojekts TOP SECRET 2.0.
 
-Stand der Konstruktion wie in top_secret.py (noch ohne Fingerzinken / 2-mm-Kante).
+Stand der Konstruktion wie top_secret_v2.py.
 Zwei Darstellungen auf A3 quer, M 1:5:
   links  geschlossen
   rechts unterer Schubkasten rechts geoeffnet (Geheimfach bleibt unsichtbar)
@@ -15,15 +15,15 @@ from ezdxf.enums import TextEntityAlignment
 
 import hlr
 
-# Masse wie top_secret.py
-B, H, T, BS = 700, 400, 305, 350
+# Masse wie top_secret_v2.py / TopSecret_Konstruktionsdaten.md
+B, H, T, BS = 700, 400, 315, 350
 E, P, EO = 20, 19, 39
 TE = T - 2
-X, F, LT, RW = 20, 3, 281, 8
+X, F, LT, RW = 20, 3, 281, 3
 LW, LH = BS - 2 * EO, H - 2 * EO
 FB, FH = LW - 2 * F, (LH - 3 * F) / 2
 FRONT_Z = [(EO + F, EO + F + FH), (EO + 2 * F + FH, EO + 2 * F + 2 * FH)]
-ZS, BD, NI, HS, GF, EB = 15, 8, 13, 110, 18, 6
+ZS, BD, NI, HS, GF, EB = 16, 19, 13, 140, 25, 19
 ISKL = 260
 AUSZUG = 160                         # Darstellung: unterer rechter SK um 160 mm geoeffnet
 
@@ -66,7 +66,7 @@ def moebel(open_lower=False):
                 bt = z0 + 37
                 sb = bt - BD - NI
                 st = sb + HS
-                xi0, xi1 = cx + P + 6, cx + KB - P - 6          # Schubkasten aussen
+                xi0, xi1 = cx + P + 5, cx + KB - P - 5          # Schubkasten aussen
                 pr.append(box("zL", xi0, xi0 + ZS, X + dy, ISKL + dy, sb, st))
                 pr.append(box("zR", xi1 - ZS, xi1, X + dy, ISKL + dy, sb, st))
                 pr.append(box("vs", xi0 + ZS, xi1 - ZS, X + dy, X + ZS + dy, sb, st))
@@ -223,7 +223,7 @@ for x in (60, 108, 146):
     line((TX + x, TY), (TX + x, TY + 17), "Schriftfeld")
 text("Benennung", (TX + 1, TY + 31.2), 1.8)
 text("Mittelstufenprojekt – TOP SECRET 2.0", (TX + 2, TY + 23.5), 4.2)
-text("Isometrie, 700 × 400 × 305, Eichenmantel um 2 Innenkorpusse", (TX + 2, TY + 19.5), 1.9)
+text("Isometrie, 700 × 400 × 315, Eichenmantel um 2 Innenkorpusse", (TX + 2, TY + 19.5), 1.9)
 text("Maßstab", (TX + 1, TY + 14.2), 1.8)
 text("1:5", (TX + 3, TY + 5), 3.5)
 text("Datum", (TX + 61, TY + 14.2), 1.8)

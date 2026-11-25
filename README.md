@@ -30,3 +30,15 @@ Innenkorpus Spanplatte schwarz 19, Außenrahmen Eiche 20, Geheimfach mit doppelt
 - `TopSecret_Schubkastenschrank_Vorschau.pdf` – beide Blätter als PDF
 - `top_secret.py` – erzeugt die DXF; `vorschau_blaetter.py Datei.dxf 0 440` – Vorschau
 - Statusangaben in der Zeichnung: (H) Herstellerangabe, (G) gewählt, n.f. noch festzulegen
+
+## TOP SECRET 2.0 – aktueller Stand (v2)
+
+Eichenmantel aus 4 Platten um zwei verschraubte schwarze Innenkorpusse, 700 × 400 × 315 mm,
+Schubkästen mit Doppel und Fingerzinken, Geheimfach, Häfele-Aufhängeschienen ineinander.
+Daten: `TopSecret_Konstruktionsdaten.md`.
+
+- `TopSecret_v2.dxf` – 3 A3-Blätter: Blatt 1 Ansichten 1:10, Detail E Gehrung 1:1, Stückliste (x 0);
+  Blatt 2 Schnitt A-A + Detail C Aufhängung 1:1 (x 440); Blatt 3 Schnitt B-B + Detail D Fingerzinken 1:1 (x 880)
+- `TopSecret_v2_Vorschau.pdf` – alle 3 Blätter; `TopSecret_Isometrie.*` – Isometrie 1:5
+- `top_secret_v2.py` / `isometrie.py` erzeugen die Zeichnungen; `vorschau_blaetter.py TopSecret_v2.dxf 0 440 880`
+- Ältere Stände: `top_secret.py` (getrennte Eichenkästen) und `schubkastenschrank.py`
