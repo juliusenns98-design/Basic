@@ -19,3 +19,14 @@ Dreitafelprojektion (Projektionsmethode 1) des wandhängenden Schubkastenschrank
 - `schubkastenschrank.py` – erzeugt die DXF; nicht festgelegte Maße (s, m, f, …) stehen
   oben als Darstellungswerte und sind in der Zeichnung mit „n.f.“ gekennzeichnet
 - `vorschau.py` – rendert eine DXF als PDF/PNG (`python3 vorschau.py Datei.dxf`)
+
+# Mittelstufenprojekt TOP SECRET 2.0 (DXF, 2 Blätter)
+
+Zwei wandhängende Schränke à 350 × 400 × 305 mm, je 2 Schubkästen (BLUM MOVENTO TIP-ON NL 250),
+Innenkorpus Spanplatte schwarz 19, Außenrahmen Eiche 20, Geheimfach mit doppeltem Boden.
+
+- `TopSecret_Schubkastenschrank.dxf` – Blatt 1 (x 0…420): Dreitafelprojektion + Schnitt A-A 1:5;
+  Blatt 2 (x 440…860): Details B (Häfele-Aufhängung), C (Verbindung), D (doppelter Boden), Stückliste
+- `TopSecret_Schubkastenschrank_Vorschau.pdf` – beide Blätter als PDF
+- `top_secret.py` – erzeugt die DXF; `vorschau_blaetter.py Datei.dxf 0 440` – Vorschau
+- Statusangaben in der Zeichnung: (H) Herstellerangabe, (G) gewählt, n.f. noch festzulegen
