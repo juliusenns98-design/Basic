@@ -39,32 +39,39 @@ def prof(part, pts, y0, y1):
     return hlr.Prism(part, "xzy", pts, y0, y1)
 
 
-def cabinet(cx, tag, open_lower=False):
+KB = (B - 2 * E) / 2                 # 330 Innenkorpus-Breite
+LWI = KB - 2 * P                     # 292 lichte Weite je Korpus
+FBI = LWI - 2 * F                    # 286 Frontbreite
+
+
+def moebel(open_lower=False):
+    """4 Eichenplatten (Gehrung) um zwei verschraubte schwarze Innenkorpusse."""
     pr = []
-    # Eichenrahmen mit Gehrungen
-    pr.append(prof(f"{tag}eL", [(cx, 0), (cx + E, E), (cx + E, H - E), (cx, H)], 0, TE))
-    pr.append(prof(f"{tag}eR", [(cx + BS, 0), (cx + BS, H), (cx + BS - E, H - E), (cx + BS - E, E)], 0, TE))
-    pr.append(prof(f"{tag}eO", [(cx, H), (cx + E, H - E), (cx + BS - E, H - E), (cx + BS, H)], 0, TE))
-    pr.append(prof(f"{tag}eU", [(cx, 0), (cx + BS, 0), (cx + BS - E, E), (cx + E, E)], 0, TE))
-    # Innenkorpus Spanplatte
-    pr.append(box(f"{tag}sL", cx + E, cx + EO, 0, T, E, H - E))
-    pr.append(box(f"{tag}sR", cx + BS - EO, cx + BS - E, 0, T, E, H - E))
-    pr.append(box(f"{tag}sO", cx + EO, cx + BS - EO, 0, T, H - EO, H - E))
-    pr.append(box(f"{tag}sU", cx + EO, cx + BS - EO, 0, T, E, EO))
-    pr.append(box(f"{tag}rw", cx + EO, cx + BS - EO, LT, LT + RW, EO, H - EO))
-    for j, (z0, z1) in enumerate(FRONT_Z):
-        dy = -AUSZUG if (open_lower and j == 0) else 0
-        pr.append(box(f"{tag}f{j}", cx + EO + F, cx + EO + F + FB, dy, dy + X, z0, z1))
-        if dy:
-            bt = z0 + 37
-            sb = bt - BD - NI
-            st = sb + HS
-            xi0, xi1 = cx + EO + 6, cx + BS - EO - 6          # Schubkasten aussen
-            pr.append(box(f"{tag}zL", xi0, xi0 + ZS, X + dy, ISKL + dy, sb, st))
-            pr.append(box(f"{tag}zR", xi1 - ZS, xi1, X + dy, ISKL + dy, sb, st))
-            pr.append(box(f"{tag}vs", xi0 + ZS, xi1 - ZS, X + dy, X + ZS + dy, sb, st))
-            pr.append(box(f"{tag}hs", xi0 + ZS, xi1 - ZS, ISKL - ZS + dy, ISKL + dy, bt, st))
-            pr.append(box(f"{tag}bo", xi0 + ZS, xi1 - ZS, X + ZS + dy, ISKL - ZS + dy, bt, bt + GF + EB))
+    pr.append(prof("eL", [(0, 0), (E, E), (E, H - E), (0, H)], 0, TE))
+    pr.append(prof("eR", [(B, 0), (B, H), (B - E, H - E), (B - E, E)], 0, TE))
+    pr.append(prof("eO", [(0, H), (E, H - E), (B - E, H - E), (B, H)], 0, TE))
+    pr.append(prof("eU", [(0, 0), (B, 0), (B - E, E), (E, E)], 0, TE))
+    for k, cx in enumerate((E, E + KB)):
+        t = "ab"[k]
+        pr.append(box(f"{t}sL", cx, cx + P, 0, T, E, H - E))
+        pr.append(box(f"{t}sR", cx + KB - P, cx + KB, 0, T, E, H - E))
+        pr.append(box(f"{t}sO", cx + P, cx + KB - P, 0, T, H - EO, H - E))
+        pr.append(box(f"{t}sU", cx + P, cx + KB - P, 0, T, E, EO))
+        pr.append(box(f"{t}rw", cx + P, cx + KB - P, LT, LT + RW, EO, H - EO))
+        for j, (z0, z1) in enumerate(FRONT_Z):
+            dy = -AUSZUG if (open_lower and k == 1 and j == 0) else 0
+            x0 = cx + P + F
+            pr.append(box(f"{t}f{j}", x0, x0 + FBI, dy, dy + X, z0, z1))
+            if dy:
+                bt = z0 + 37
+                sb = bt - BD - NI
+                st = sb + HS
+                xi0, xi1 = cx + P + 6, cx + KB - P - 6          # Schubkasten aussen
+                pr.append(box("zL", xi0, xi0 + ZS, X + dy, ISKL + dy, sb, st))
+                pr.append(box("zR", xi1 - ZS, xi1, X + dy, ISKL + dy, sb, st))
+                pr.append(box("vs", xi0 + ZS, xi1 - ZS, X + dy, X + ZS + dy, sb, st))
+                pr.append(box("hs", xi0 + ZS, xi1 - ZS, ISKL - ZS + dy, ISKL + dy, bt, st))
+                pr.append(box("bo", xi0 + ZS, xi1 - ZS, X + ZS + dy, ISKL - ZS + dy, bt, bt + GF + EB))
     return pr
 
 
@@ -133,8 +140,8 @@ def place(lines, x_left, y_bottom, scale=0.2):
     return (max(us) - u0) * scale, (max(ws) - w0) * scale
 
 
-closed = render(cabinet(0, "a") + cabinet(BS, "b"))
-opened = render(cabinet(0, "a") + cabinet(BS, "b", open_lower=True))
+closed = render(moebel())
+opened = render(moebel(open_lower=True))
 
 # Blatt A3
 pline([(0, 0), (420, 0), (420, 297), (0, 297)], "Duenn")
@@ -188,9 +195,7 @@ R = placed(opened, 214, Y0 - 8)
 
 # Hauptmasse in der geschlossenen Ansicht (Masslinien parallel zu den Iso-Achsen)
 off = 45                                                 # Abstand der Masslinie (Modell-mm)
-isodim(L(0, 0, 0), L(BS, 0, 0), L(0, 0, -off), -30, 90)               # 350
-isodim(L(BS, 0, 0), L(B, 0, 0), L(0, 0, -off), -30, 90)               # 350
-isodim(L(0, 0, 0), L(B, 0, 0), L(0, 0, -2 * off), -30, 90)            # Breite 700
+isodim(L(0, 0, 0), L(B, 0, 0), L(0, 0, -off), -30, 90)                # Breite 700
 isodim(L(B, 0, 0), L(B, T, 0), L(B, 0, -off), 30, 90)                  # Tiefe 305
 isodim(L(0, 0, 0), L(0, 0, H), L(-off, 0, 0), 90, 150)                 # Hoehe 400
 
@@ -203,8 +208,8 @@ notes = [
     "Isometrie nach DIN ISO 5456-3: Breite und Tiefe unter 30° zur Waagrechten, Höhe senkrecht,",
     "alle Achsmaße unverkürzt im Maßstab 1:5 – Kantenlängen direkt mit dem Lineal abtragen.",
     "Vorlage für die Perspektive von Hand (Projektmappe Pkt. 5); verdeckte Kanten nicht dargestellt.",
-    "Stand der Konstruktion wie Zeichnung MSP-TS-01/02 (Fingerzinken und 2-mm-Kante noch nicht",
-    "eingezeichnet; an den Außenansichten ändert sich dadurch nichts).",
+    "Aufbau: zwei schwarze Innenkorpusse (Spanplatte 19, je 330 breit) in der Werkstatt verschraubt,",
+    "darum 4 Eichenplatten 20 mm (Seiten, Ober-, Unterboden) auf Gehrung. Mitte: 2 × 19 Spanplatte.",
 ]
 for i, t in enumerate(notes):
     text(t, (24, 52 - i * 4.4), 1.9)
@@ -218,7 +223,7 @@ for x in (60, 108, 146):
     line((TX + x, TY), (TX + x, TY + 17), "Schriftfeld")
 text("Benennung", (TX + 1, TY + 31.2), 1.8)
 text("Mittelstufenprojekt – TOP SECRET 2.0", (TX + 2, TY + 23.5), 4.2)
-text("Isometrie, 2 Schränke à 350 × 400 × 305", (TX + 2, TY + 19.5), 1.9)
+text("Isometrie, 700 × 400 × 305, Eichenmantel um 2 Innenkorpusse", (TX + 2, TY + 19.5), 1.9)
 text("Maßstab", (TX + 1, TY + 14.2), 1.8)
 text("1:5", (TX + 3, TY + 5), 3.5)
 text("Datum", (TX + 61, TY + 14.2), 1.8)
