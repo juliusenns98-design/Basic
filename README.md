@@ -42,3 +42,9 @@ Daten: `TopSecret_Konstruktionsdaten.md`.
 - `TopSecret_v2_Vorschau.pdf` – alle 3 Blätter; `TopSecret_Isometrie.*` – Isometrie 1:5
 - `top_secret_v2.py` / `isometrie.py` erzeugen die Zeichnungen; `vorschau_blaetter.py TopSecret_v2.dxf 0 440 880`
 - Ältere Stände: `top_secret.py` (getrennte Eichenkästen) und `schubkastenschrank.py`
+
+# Bücherregal – Schnitt B-B (Aufgabenblatt)
+
+- `Buecherregal_Schnitt_B-B.dxf` / `_Vorschau.pdf` – waagerechter Schnitt B-B M 1:1 durch den Schubkasten
+  im rechten unteren Fach (Lauf-/Streif-/Kippleisten, gezinkter Schubkasten, Doppel mit Griffloch, Rückwandfalz)
+- `buecherregal_bb.py` erzeugt die Zeichnung; `zeichenhilfe.py` enthält die gemeinsamen Zeichenfunktionen
