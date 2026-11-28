@@ -42,7 +42,7 @@ Status: **V** vorgegeben · **H** Herstellerangabe · **G** gewählt · **n.f.**
 ## Geheimfach (Schubkasten rechts unten)
 - Doppelter Boden: Leisten Eiche 25 × 10 an Vorder- und Hinterstück, **Fachhöhe 25 mm**, Fach ca. 250 × 188 mm → A5 / A4 einmal gefaltet. (G)
 - Einlegeboden Spanplatte schwarz 16 mm, 248 × 206 mm, lose aufgelegt, Fuge 1 mm – sieht aus wie ein normaler Boden. (G)
-- Öffnen: Stahlscheibe Ø 20 von unten eingelassen (Restdicke 3 mm), Neodym-Magnet Ø 20 × 5 als „Schlüssel“. (G)
+- Öffnen: Stahlscheibe Ø 20 × 2 in Bohrung Ø 20 × 13 von unten (Restdicke 3 mm), Lage 70 mm hinter Doppel, 20 mm neben linker Schubkastenseite (x = 420); Neodym-Magnet Ø 20 × 5 als „Schlüssel“. (G)
 - Nutzbare Höhe über dem Einlegeboden ca. 70 mm.
 
 ## Beschläge
@@ -65,7 +65,7 @@ Status: **V** vorgegeben · **H** Herstellerangabe · **G** gewählt · **n.f.**
 
 **toom:** Spanplatte melaminbeschichtet schwarz 16 mm (Art. 7100714, Zuschnitt) für 4 Böden 258 × 240 und Einlegeboden 248 × 206.
 
-**Andere Shops:** MOVENTO 760H2501T/2500T (4 Paar), Kupplung T51.7601 (4 Paar), Häfele 290.09.910 (1), Neodym 20 × 5 + Stahlscheibe Ø 20, Flachdübel Gr. 20, ABS-Kante schwarz 23 × 2 (ca. 3 m, im Betrieb fragen), Holzdübel 8 × 35 und 6 × 30, Schrauben, Möbelöl.
+**Andere Shops:** MOVENTO 760H2501T/2500T (4 Paar), Kupplung T51.7601 (4 Paar), Häfele 290.09.910 (1), Neodym 20 × 5 + Stahlscheibe Ø 20, Flachdübel Gr. 20, ABS-Kante schwarz 23 × 2 (ca. 3 m, im Betrieb fragen), Holzdübel 8 × 35 und 6 × 25 (Vorderstück: 10 tief in die Seite), Schrauben, Möbelöl.
 
 ## Zeichnungen (Schulvorgaben)
 - Endzeichnung: `TopSecret_Endzeichnung.dxf` (Modell 1:1, Layouts Blatt 1–3).

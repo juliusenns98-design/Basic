@@ -180,6 +180,8 @@ def zigzag(p, q, n=None):
 # Werkstoffe (Schnitt)
 EI = ("ANSI31", 1.2, 0.0)        # Eiche (Vollholz)
 EIQ = ("ANSI31", 1.2, 90.0)      # Eiche, andere Richtung
+EIW = ("ANSI31", 2.2, 90.0)      # Eiche, Leisten (weiter, quer)
+XG = 420                         # Achse Stahlscheibe Geheimfach = Schnitt A-A (G)
 SP = ("ANSI37", 0.9, 0.0)        # Spanplatte
 EI5 = ("ANSI31", 0.45, 0.0)      # 1:10
 SP5 = ("ANSI37", 0.35, 0.0)
@@ -416,8 +418,8 @@ FV.seg(B / 2, E, B / 2, H - E)                           # Fuge Korpus/Korpus
 FV.seg(B / 2, -8, B / 2, H + 8, "Mittellinie")
 FV.seg(-8, H / 2, B + 8, H / 2, "Mittellinie")
 view_title(FV.ox, FV.oy + 40 + 28, "Vorderansicht", "M 1:10")
-# Schnittverlauf A-A (x = 515), Blick von links
-xa = inner_x(1) + LW / 2
+# Schnittverlauf A-A (x = 420, durch die Stahlscheibe), Blick von links
+xa = XG
 for v0, v1, va in ((H + 160, H + 185, H + 180), (-100, -125, -120)):
     FV.seg(xa, (H + 3) if v0 > 0 else -3, xa, (H + 22) if v0 > 0 else -22, "Schnittverlauf")
     FV.seg(xa, v0, xa, v1, "Schnittverlauf")
@@ -479,27 +481,51 @@ dim(TV(0, 0), TV(0, T), (TV.ox - 5, 0), vertical=True, ds="M10")
 balloon(TV(450, 150), (TV.ox + 52, TV.oy - 8), 2)
 
 # Pruefung / Hinweise links unten
-NX, NY = 24, 128
-text("Prüfung Beschläge, Maße, Vorgaben", (NX, NY), 2.5)
-notes = [
-    "Kantenlänge 700 + 400 + 315 = 1415 (max. 1500, V). Bewegliches Bauteil: 4 Schubkästen (V).",
-    "Sichtbare handwerkliche Verbindung: Fingerzinken Hinterstück/Seite (Detail D, V).",
-    "MOVENTO TIP-ON 760H2501T, NL 250, 40 kg (H; Handel z. T. 760H2500T), Kupplung T51.7601.",
-    "Innenschubkasten mit TIP-ON: lichte Tiefe min. NL + X + 7 = 277 (H); vorhanden 281.",
-    "SKL = NL - 10 = 240; ISKL = 260; SKW = LW - 42 = 250 (H); Zarge 16 = Maximum (H),",
-    "Seiteneinstellung dann eingeschränkt: Schubkasten genau auf Breite fertigen.",
-    f"Unter OK Boden min. 38 (H): 40; über Seite min. 7 (H): {de(H - EO - ST[1])}; Nische 12-15 (H): 13.",
-    "Synchronisierung nicht nötig (empfohlen ab KB 600, H). Quelle: Blum TD-132/1 DE/06.22.",
-    "Aufhängung: 2 Häfele-Aufhängeschienen 290.09.910 ineinander (H: Stahl verzinkt,",
-    "Lochabstand 25). Profil lt. Händler 29 × 5,5 × 1,75; Spalt 12 (G). Tragkraft",
-    "für diese Nutzung ohne Herstellerangabe (n.f.) – reichlich verschrauben.",
-    "Maserung: Seite links – Oberboden – Seite rechts aus einem Brett, umlaufend (G).",
-    "Doppel: alle 4 aus einem Stück, Maserung waagrecht durchlaufend (G).",
-    "Eiche vorn fest, hinten Langlöcher (Quellen/Schwinden); Eiche hinten 2 kürzer.",
-    "(V) Vorgabe  (H) Herstellerangabe  (G) gewählt  n.f. noch festzulegen",
+NX, NY = 24, 130
+groups = [
+    ("Vorgaben Mittelstufenprojekt", [
+        "Kantenlänge 700 + 400 + 315 = 1415 (max. 1500). Bewegliches Bauteil: 4 Schubkästen.",
+        "Sichtbare handwerkliche Verbindung: Fingerzinken Hinterstück/Seite (Blatt 3, Detail D).",
+    ]),
+    ("Blum MOVENTO TIP-ON 760H2501T, NL 250, 40 kg (TD-132/1 DE/06.22)", [
+        "Lichte Tiefe min. NL + X + 7 = 277, vorhanden 281. SKL = NL - 10 = 240, SKW = LW - 42 = 250.",
+        f"Unter OK Boden min. 38: 40. Über Seite min. 7: {de(H - EO - ST[1])}. Nische 12-15: 13. Zarge max. 16.",
+        "Kupplung T51.7601 L/R. Synchronisierung nicht nötig (empfohlen erst ab KB 600).",
+    ]),
+    ("Häfele-Aufhängeschiene 290.09.910 (Stahl verzinkt), 2 Stück ineinander", [
+        "Profil lt. Händler 29 × 5,5 × 1,75, Spalt 12 (G). Tragkraft für diese Nutzung n.f.",
+        "Je Korpus ein Paar ca. 280 auf Aufhängeleiste (7); Wandbefestigung passend zur Wand.",
+    ]),
+    ("Holz und Oberfläche", [
+        "Seite links – Oberboden – Seite rechts aus einem Brett, Maserung umlaufend (G).",
+        "Doppel: alle 4 aus einem Stück, Maserung waagrecht durchlaufend. Eiche natur geölt.",
+        "Eiche vorn fest, hinten in Langlöchern verschraubt (Quellen/Schwinden), hinten 2 kürzer.",
+    ]),
 ]
-for i, s in enumerate(notes):
-    text(s, (NX, NY - 4.6 - i * 3.9), 1.65)
+text("Hinweise", (NX, NY), 2.5)
+yy = NY - 5.5
+for head, lines_ in groups:
+    text(head, (NX, yy), 1.8)
+    yy -= 3.7
+    for ln in lines_:
+        text(ln, (NX + 2, yy), 1.55)
+        yy -= 3.4
+    yy -= 1.2
+text("(V) Vorgabe   (H) Herstellerangabe   (G) gewählt   n.f. noch festzulegen", (NX, yy - 0.5), 1.55)
+
+# Schraffur-Legende
+GX0, GY0 = X1 + 222, 258
+text("Werkstoffe im Schnitt", (GX0, GY0 + 6), 2.0)
+leg = [("ANSI31", 1.2, 0.0, False, "Eiche massiv (Mantel, Doppel, Schubkasten)"),
+       ("ANSI37", 0.9, 0.0, False, "Spanplatte P2 schwarz 16 / 19"),
+       ("SOLID", 1, 0, True, "HDF 3, ABS-Kante 2, Stahl (schwarz)"),
+       ("AR-CONC", 0.05, 0.0, False, "Wand")]
+for i, (pat, sc, an, so, lab) in enumerate(leg):
+    y_ = GY0 - i * 7
+    box = [(GX0, y_ - 2), (GX0 + 10, y_ - 2), (GX0 + 10, y_ + 2.5), (GX0, y_ + 2.5)]
+    hatch_poly(box, pat, sc, an, solid=so)
+    pline(box, "Duenn", closed=True)
+    text(lab, (GX0 + 13, y_ - 0.7), 1.6)
 
 # Stueckliste rechts
 LX, LY = X1 + 222, 66
@@ -526,8 +552,8 @@ parts = [
     ("18", "4", "Aufhängeschiene, Stück", "ca. 280", "Häfele 290.09.910", "H/G"),
     ("19", "3 m", "ABS-Kante schwarz", "23 × 2", "ABS", "G"),
     ("20", "n.f.", "Flachdübel Gehrung", "Gr. 20", "Buche", "G"),
-    ("21", "n.f.", "Holzdübel", "Ø8 × 35 / Ø6 × 30", "Buche", "G"),
-    ("22", "n.f.", "Spanplattenschraube", "4 × 30", "Stahl verzinkt", "G"),
+    ("21", "n.f.", "Holzdübel Korpus / Vorderst.", "Ø8 × 35 / Ø6 × 25", "Buche", "G"),
+    ("22", "n.f.", "Spanplattenschrauben", "4×16 / 4×30 / 4×40", "Stahl verzinkt", "G"),
     ("23", "n.f.", "Schraube Führung", "Ø3,5 × 15", "Blum 609.1500", "H"),
     ("24", "–", "Wandbefestigung Schiene", "n.f.", "passend zur Wand", "n.f."),
 ]
@@ -611,23 +637,23 @@ AV.rect(YR0, EO - NUT, YR1, 205, solid=True)
 AV.rect(0, FZ[0][0], X, FZ[0][1], hatch=EIQ)
 AV.rect(0, FZ[1][0], X, 210, hatch=EIQ)
 # Schubkasten unten: Vorderstueck, Hinterstueck, Boden (geschnitten)
-AV.rect(X, bt, X + ZS, st, hatch=EIQ)
-AV.rect(SKL + X - ZS, bt, SKL + X, st, hatch=EIQ)
+AV.rect(X, bt, X + ZS, st, hatch=EI)
+AV.rect(SKL + X - ZS, bt, SKL + X, st, hatch=EI)
 AV.rect(X, bt - BD, SKL + X, bt, hatch=SP)
 # Seite dahinter (sichtbar): Oberkante und hintere Stirn unten
 AV.seg(X + ZS, st, SKL + X - ZS, st)
 AV.seg(SKL + X, sb, SKL + X, bt - BD)
 AV.seg(X, sb, X, bt - BD)
 # Geheimfach: Leisten, Einlegeboden, Stahlscheibe
-AV.rect(X + ZS, bt, X + ZS + LS, bt + GF, hatch=EI)
-AV.rect(SKL + X - ZS - LS, bt, SKL + X - ZS, bt + GF, hatch=EI)
+AV.rect(X + ZS, bt, X + ZS + LS, bt + GF, hatch=EIW)
+AV.rect(SKL + X - ZS - LS, bt, SKL + X - ZS, bt + GF, hatch=EIW)
 y_e0, y_e1 = X + ZS + 1, SKL + X - ZS - 1
 AV.rect(y_e0, bt + GF, 60, bt + GF + BD, hatch=SP)
 AV.rect(80, bt + GF, y_e1, bt + GF + BD, hatch=SP)
-AV.rect(60, bt + GF + BD - 5, 80, bt + GF + BD, hatch=SP)        # Restdicke 3 ueber Bohrung
+AV.rect(60, bt + GF + BD - 3, 80, bt + GF + BD, hatch=SP)        # Restdicke 3 ueber Bohrung
 AV.rect(60, bt + GF + BD - 5, 80, bt + GF + BD - 3, solid=True)  # Stahlscheibe 2
-AV.seg(60, bt + GF, 60, bt + GF + BD - 5)
-AV.seg(80, bt + GF, 80, bt + GF + BD - 5)
+AV.seg(60, bt + GF, 60, bt + GF + BD - 3)
+AV.seg(80, bt + GF, 80, bt + GF + BD - 3)
 # MOVENTO (dahinter, schematisch) und Kupplung
 AV.rect(X, bt - 38 + 2, X + NL, sb, "Beschlag")
 AV.rect(X + 8, sb, X + 48, bt - BD, "Beschlag")
@@ -639,7 +665,7 @@ AV.breaks()
 AV.zz(AV(-2, 195), AV(95, 195))
 AV.zz(AV(205, 195), AV(T + 10, 195))
 text("Schnitt A-A", (X2 + 24, 44), 3.5)
-text("M 1:1 · Schnitt durch die Mitte des rechten Korpus (x = 515), unterer Schubkasten mit Geheimfach,",
+text("M 1:1 · Schnitt bei x = 420 durch den rechten Korpus und die Stahlscheibe, unterer Schubkasten mit Geheimfach,",
      (X2 + 24, 39.5), 1.9)
 text("Darstellung in der Tiefe unterbrochen (95…205 ausgelassen), oberhalb z = 195 siehe Detail C, Doppelhöhen Blatt 1.",
      (X2 + 24, 35.8), 1.9)
@@ -678,7 +704,7 @@ balloon(AV(SKL + X - ZS / 2, 150), (AV(225, 0)[0], AV(0, 175)[1]), 11)
 balloon(AV(230, bt - BD / 2), (AV(225, 0)[0] - 8, AV(0, bt - 30)[1]), 12)
 balloon(AV(SKL + X - ZS - LS / 2, bt + 12), (AV(215, 0)[0], AV(0, bt + 50)[1]), 13)
 balloon(AV(40, bt + GF + BD / 2), (AV(40, 0)[0], AV(0, 165)[1]), 14)
-balloon(AV(70, bt + GF + 15), (AV(88, 0)[0], AV(0, 150)[1]), 15)
+balloon(AV(70, bt + GF + BD - 4), (AV(88, 0)[0], AV(0, 150)[1]), 15)
 balloon(AV(250, bt - 30), (AV(260, 0)[0], AV(0, bt - 45)[1] - 2), 16)
 balloon(AV(28, sb + 6), (AV(10, 0)[0] + 2, AV(0, sb + 22)[1]), 17)
 balloon(AV(YR0 + 1.5, 120), (AV(T, 0)[0] - 12, AV(0, 120)[1]), 6)
@@ -746,11 +772,19 @@ L3 = new_sheet("Blatt 3")
 V3 = len(VIEWS)
 sheet_frame(X3)
 title_block(X3, 3, 3, "1:1", "Schnitt B-B, Detail D Fingerzinken")
-BV = View(X3 + 52, 72, 1.0, uw=[(0, 100), (296, 404)], vw=(0, 190), gap=8)
+BV = View(X3 + 48, 72, 1.0, uw=[(0, 100), (296, 440)], vw=(0, 190), gap=8)
 yB = 70
 # Eiche links + Unterboden
-BV.rect(0, 0, E, 195, hatch=EIQ)
-BV.rect(E, 0, B, E, hatch=EI)
+# Eichenmantel unten links auf Gehrung
+P1 = [(0, 0), (E, E), (E, 190), (0, 190)]
+BV.ghatch([BV(*q) for q in P1], *EIQ)
+for a_, b_ in ((0, 1), (1, 2), (3, 0)):
+    BV.gl(BV(*P1[a_]), BV(*P1[b_]))
+P2 = [(0, 0), (100, 0), (100, E), (E, E)]
+BV.ghatch([BV(*q) for q in P2], *EI)
+for a_, b_ in ((0, 1), (2, 3)):
+    BV.gl(BV(*P2[a_]), BV(*P2[b_]))
+BV.rect(290, 0, B, E, hatch=EI)
 for kk in (0, 1):
     xk = CX[kk]
     BV.rect(xk, E, xk + P, 195, hatch=SP)
@@ -771,7 +805,14 @@ for kk in (0, 1):
 # Geheimfach im rechten Korpus (Leiste hinten sichtbar, Einlegeboden geschnitten)
 a0, a1, a2, a3 = box_x(1)
 BV.rect(a1, BT[0], a2, BT[0] + GF, "Duenn")
-BV.rect(a1 + 1, BT[0] + GF, a2 - 1, BT[0] + GF + BD, hatch=SP)
+zg = BT[0] + GF                                                   # UK Einlegeboden
+BV.rect(a1 + 1, zg, XG - 10, zg + BD, hatch=SP)
+BV.rect(XG + 10, zg, a2 - 1, zg + BD, hatch=SP)
+BV.rect(XG - 10, zg + BD - 3, XG + 10, zg + BD, hatch=SP)          # Restdicke 3
+BV.rect(XG - 10, zg + BD - 5, XG + 10, zg + BD - 3, solid=True)    # Stahlscheibe
+BV.seg(XG - 10, zg, XG - 10, zg + BD - 3)
+BV.seg(XG + 10, zg, XG + 10, zg + BD - 3)
+BV.seg(XG, zg - 4, XG, zg + BD + 4, "Mittellinie")
 # Verbindung Korpus A/B: Spanplattenschraube 4 x 30 bei z = 120
 zs_ = 120
 BV.poly([(331, zs_ - 4), (331 - 0, zs_ + 4), (334, zs_ + 2), (361, zs_ + 2), (361, zs_ - 2), (334, zs_ - 2)])
@@ -779,7 +820,7 @@ BV.poly([(331, zs_ - 4), (331 - 0, zs_ + 4), (334, zs_ + 2), (361, zs_ + 2), (36
 BV.poly([(39, 150 - 4), (39, 150 + 4), (36, 150 + 2), (9, 150 + 2), (9, 150 - 2), (36, 150 - 2)])
 BV.breaks()
 BV.zz(BV(-2, 190), BV(100, 190))
-BV.zz(BV(296, 190), BV(404, 190))
+BV.zz(BV(296, 190), BV(440, 190))
 text("Schnitt B-B", (X3 + 24, 44), 3.5)
 text("M 1:1 · bei y = 70 (durch die Stahlscheibe), Blick nach hinten, untere Schubkästen, Breite unterbrochen",
      (X3 + 24, 39.5), 1.9)
@@ -796,15 +837,15 @@ for a_, b_ in ((310, 326), (326, 331), (331, 350), (350, 369), (369, 374), (374,
         loc=(BV((a_ + b_) / 2, 190)[0], by + 10.5) if b_ - a_ < 8 else None)
 dim(BV(331, 190), BV(369, 190), (0, by + 13), "38")
 xl = BV(0, 0)[0]
-for (a, b, t) in ((0, E, "<>"), (E, EO, "<>"), (EO, SB[0], "8"), (SB[0], BT[0] - BD, "13"),
+for (a, b, t) in ((0, E, "<>"), (E, EO, "<>"), (EO, SB[0], "<>"), (SB[0], BT[0] - BD, "13"),
                   (BT[0] - BD, BT[0], "<>"), (BT[0], ST[0], "<>")):
     dim(BV(0, a), BV(0, b), (xl - 6, 0), t, vertical=True,
         loc=(xl - 7.5, BV(0, b)[1] + 3) if b - a < 10 else None)
 dim(BV(0, SB[0]), BV(0, ST[0]), (xl - 16, 0), "140", vertical=True)
-xr3 = BV(404, 0)[0]
-dim(BV(404, BT[0]), BV(404, BT[0] + GF), (xr3 + 6, 0), "25 (G)", vertical=True)
-dim(BV(404, BT[0] + GF), BV(404, BT[0] + GF + BD), (xr3 + 6, 0), vertical=True)
-dim(BV(404, BT[0] + GF + BD), BV(404, ST[0]), (xr3 + 6, 0), vertical=True)
+xr3 = BV(440, 0)[0]
+dim(BV(440, BT[0]), BV(440, BT[0] + GF), (xr3 + 6, 0), "25 (G)", vertical=True)
+dim(BV(440, BT[0] + GF), BV(440, BT[0] + GF + BD), (xr3 + 6, 0), vertical=True)
+dim(BV(440, BT[0] + GF + BD), BV(404, ST[0]), (xr3 + 6, 0), vertical=True)
 leader(BV(345, zs_), (BV(345, 0)[0] - 6, BV(0, 140)[1] + 20), "Schraube 4×30 (22), Korpus A/B", right=False)
 leader(BV(20, 150), (BV(60, 0)[0], BV(0, 175)[1] + 0), "4×30 Eiche/Span (22)", right=True)
 leader(BV(EO + 14, BT[0] - 30), (X3 + 150, 60), "MOVENTO (16), Kontur schematisch", right=True)
@@ -818,7 +859,7 @@ balloon(BV(380, BT[0] + GF / 2), (BV(385, 0)[0], BV(0, 30)[1]), 11)
 
 # Detail D – Fingerzinken (1:1): Ansicht von hinten auf hintere linke Ecke + Draufsicht
 # lokale Koordinaten: u = x ab Aussenseite Seite, v = z ab UK Seite
-DV_ = View(X3 + 322, 120, 1.0, uw=[(0, 62)], vw=(0, HS))
+DV_ = View(X3 + 345, 120, 1.0, uw=[(0, 62)], vw=(0, HS))
 DV_.rect(0, 0, ZS, BD + NI, hatch=EIQ)                       # Seite unten (unter Hinterstueck)
 for i in range(NF):
     z0, z1 = BD + NI + i * FP, BD + NI + (i + 1) * FP
@@ -832,8 +873,8 @@ DV_.gcircle(DV_(7, 11), 3)
 DV_.seg(7, 6, 7, 16, "Mittellinie")
 DV_.seg(2, 11, 12, 11, "Mittellinie")
 DV_.zz(DV_(62, -2), DV_(62, HS + 2))
-text("Detail D – Fingerzinken", (X3 + 296, 282), 3.0)
-text("Hinterstück/Seite, Ansicht von hinten · M 1:1", (X3 + 296, 277.5), 1.9)
+text("Detail D – Fingerzinken", (X3 + 318, 282), 3.0)
+text("Hinterstück/Seite, Ansicht von hinten · M 1:1", (X3 + 318, 277.5), 1.9)
 dl = DV_(0, 0)[0]
 dim(DV_(0, BD + NI), DV_(0, HS), (dl - 6, 0), f"7 × {de(FP)} = {VH}", vertical=True)
 dim(DV_(0, 0), DV_(0, NI), (dl - 6, 0), vertical=True)
@@ -842,18 +883,18 @@ dim(DV_(0, BD + NI + FP), DV_(0, BD + NI + 2 * FP), (dl - 14, 0), vertical=True)
 dim(DV_(0, 0), DV_(0, 11), (dl - 21, 0), "11 (H)", vertical=True)
 dim(DV_(0, HS), DV_(ZS, HS), (0, DV_(0, HS)[1] + 5))
 dim(DV_(0, 0), DV_(7, 0), (0, DV_(0, 0)[1] - 5), "7 (H)", loc=(DV_(3.5, 0)[0] - 5, DV_(0, 0)[1] - 4.2))
-leader(DV_(7 + 2.2, 11 + 2.2), (DV_(30, 0)[0], DV_(0, 0)[1] - 10), "Ø6 × 10 tief (H, Blum)", right=True)
+leader(DV_(7 - 2.2, 11 - 2.2), (DV_(7, 0)[0] - 2, DV_(0, 0)[1] - 14), "Ø6 × 10 tief (H, Blum)", right=True)
 dn = [
-    f"7 Finger, Teilung {VH}/7 ≈ {de(FP)}; Fingertiefe = Holzdicke 16.",
-    "Seite: Finger 1, 3, 5, 7 (oben und unten außen); Hinterstück: 2, 4, 6.",
-    "Herstellung: Kreissäge + Zinkenvorrichtung (G). Hinterstück steht auf dem",
-    "Boden, Boden läuft darunter durch bis Hinterkante.",
-    "Blum-Bohrung Ø6 × 10 in Stirnseite der Seite (TD-132/1 S. 5, Bohrlehre",
-    "T65.1000.02). Abstand zur Bodennut ca. 1 – Nut 5 tief, ggf. hinten",
-    "auslaufen lassen (n.f., an Probestück prüfen).",
+    f"7 Finger, Teilung {VH}/7 ≈ {de(FP)}, Tiefe 16.",
+    "Seite: Finger 1, 3, 5, 7 – Hinterstück: 2, 4, 6.",
+    "Kreissäge + Zinkenvorrichtung (G).",
+    "Hinterstück steht auf dem Boden.",
+    "Blum-Bohrung Ø6 × 10 (TD-132/1 S. 5,",
+    "Bohrlehre T65.1000.02). Restholz zur",
+    "Bodennut ca. 1 – am Probestück prüfen.",
 ]
 for i, s in enumerate(dn):
-    text(s, (X3 + 290, 100 - i * 3.6), 1.6)
+    text(s, (X3 + 312, 96 - i * 3.5), 1.55)
 
 close_sheet(L3, V3)
 doc.layouts.delete("Layout1")
