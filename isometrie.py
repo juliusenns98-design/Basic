@@ -23,7 +23,7 @@ X, F, LT, RW = 20, 3, 281, 3
 LW, LH = BS - 2 * EO, H - 2 * EO
 FB, FH = LW - 2 * F, (LH - 3 * F) / 2
 FRONT_Z = [(EO + F, EO + F + FH), (EO + 2 * F + FH, EO + 2 * F + 2 * FH)]
-ZS, BD, NI, HS, GF, EB = 16, 19, 13, 140, 25, 19
+ZS, BD, NI, HS, GF, EB = 16, 16, 13, 140, 25, 16
 ISKL = 260
 AUSZUG = 160                         # Darstellung: unterer rechter SK um 160 mm geoeffnet
 

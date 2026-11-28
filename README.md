@@ -48,3 +48,10 @@ Daten: `TopSecret_Konstruktionsdaten.md`.
 - `Buecherregal_Schnitt_B-B.dxf` / `_Vorschau.pdf` – waagerechter Schnitt B-B M 1:1 durch den Schubkasten
   im rechten unteren Fach (Lauf-/Streif-/Kippleisten, gezinkter Schubkasten, Doppel mit Griffloch, Rückwandfalz)
 - `buecherregal_bb.py` erzeugt die Zeichnung; `zeichenhilfe.py` enthält die gemeinsamen Zeichenfunktionen
+
+## TOP SECRET 2.0 – Endzeichnung (AutoCAD)
+
+- `TopSecret_Endzeichnung.dxf` – Modellbereich: alle Ansichten/Schnitte/Details in wahrer Größe (mm);
+  Layouts „Blatt 1“–„Blatt 3“ (A3 quer) mit Ansichtsfenstern 1:10 / 1:1, Bemaßung, Stückliste, Schriftfeld
+- `TopSecret_Endzeichnung_Vorschau.pdf` – Vorschau der drei Layouts
+- `top_secret_final.py` erzeugt die DXF; `vorschau_layouts.py Datei.dxf` rendert alle Layouts

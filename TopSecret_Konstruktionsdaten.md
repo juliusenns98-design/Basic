@@ -1,4 +1,4 @@
-# TOP SECRET 2.0 – Konstruktionsdaten (Stand 25.11.2026)
+# TOP SECRET 2.0 – Konstruktionsdaten (Stand 28.11.2026)
 
 Gesammelte Entscheidungen als Grundlage für die neue Zeichnung, Stückliste und Materialliste.
 Status: **V** vorgegeben · **H** Herstellerangabe · **G** gewählt · **n.f.** noch festzulegen
@@ -30,20 +30,20 @@ Status: **V** vorgegeben · **H** Herstellerangabe · **G** gewählt · **n.f.**
 | Teil | Maß L × B × D | Werkstoff | Status |
 |---|---|---|---|
 | Seite (8) | 240 × 140 × 16 | Eiche (aus 18 mm gehobelt) | H (L = NL − 10, max 16) / G |
-| Hinterstück (4) | 282 × 108 × 16, **Fingerzinken** 7 Finger à ca. 15,4 mm | Eiche | G |
-| Vorderstück (4) | 250 × 108 × 16, **gedübelt** zwischen den Seiten | Eiche | G |
-| Boden (4) | 258 × 240 × 19, in Nut der Seiten (5 tief), Vorder-/Hinterstück stehen darauf | Spanplatte schwarz | G |
+| Hinterstück (4) | 282 × 111 × 16, **Fingerzinken** 7 Finger à ca. 15,9 mm | Eiche | G |
+| Vorderstück (4) | 250 × 111 × 16, **gedübelt** zwischen den Seiten | Eiche | G |
+| Boden (4) | 258 × 240 × 16, in Nut der Seiten (5 tief), Vorder-/Hinterstück stehen darauf | Spanplatte schwarz 16 (toom) | G |
 
 - Innenbreite SKW = LW − 42 = **250 mm** (+0/−1,5, H); Bodennische 13 mm (H 12–15).
-- OK Boden unten 40 mm über Korpusboden (H min. 38); über der oberen Seite 14,5 mm frei (H min. 7).
+- OK Boden unten 40 mm über Korpusboden (H min. 38); über der oberen Seite 11,5 mm frei (H min. 7).
 - Fingerzinken mit Kreissäge + Vorrichtung. Blum-Bohrung Ø 6 × 10 hinten in der Seite (TD-132/1 S. 5) mit Bodennut abstimmen.
 - Hinweis Blum: bei 16 mm Seiten eingeschränkte Seiteneinstellung bei voller Toleranzausnutzung → Schubkasten genau auf Breite fertigen.
 
 ## Geheimfach (Schubkasten rechts unten)
 - Doppelter Boden: Leisten Eiche 25 × 10 an Vorder- und Hinterstück, **Fachhöhe 25 mm**, Fach ca. 250 × 188 mm → A5 / A4 einmal gefaltet. (G)
-- Einlegeboden Spanplatte schwarz 19 mm, 248 × 206 mm, lose aufgelegt, Fuge 1 mm – sieht aus wie ein normaler Boden. (G)
+- Einlegeboden Spanplatte schwarz 16 mm, 248 × 206 mm, lose aufgelegt, Fuge 1 mm – sieht aus wie ein normaler Boden. (G)
 - Öffnen: Stahlscheibe Ø 20 von unten eingelassen (Restdicke 3 mm), Neodym-Magnet Ø 20 × 5 als „Schlüssel“. (G)
-- Nutzbare Höhe über dem Einlegeboden ca. 64 mm.
+- Nutzbare Höhe über dem Einlegeboden ca. 70 mm.
 
 ## Beschläge
 - Blum MOVENTO TIP-ON, NL 250, 40 kg: **760H2501T** (TD-132/1 DE/06.22; im Handel oft noch 760H2500T), 4 Paar. (H)
@@ -60,12 +60,15 @@ Status: **V** vorgegeben · **H** Herstellerangabe · **G** gewählt · **n.f.**
 |---|---|---|
 | Leimholz Eiche Vintage durchgeh. Lamellen 2000 × 400 × 20 (Art. 10454786) | 2 | Brett 1: Seite – Oberboden – Seite am Stück; Brett 2: Frontstück 640 × 340, Unterboden, Rest → Vorderstücke |
 | Leimholz Eiche B/C 2000 × 400 × 18 (Art. 8203385) | 1 | Seiten, Hinterstücke, Leisten – auf 16 mm hobeln |
-| Spanplatte schwarz 190PE 2650 × 1032 × 19 (Art. 5691782) | 1 | Innenkorpusse, Aufhängeleiste, Böden, Einlegeboden |
+| Spanplatte schwarz 190PE 2650 × 1032 × 19 (Art. 5691782) | 1 | Innenkorpusse, Aufhängeleisten |
 | HDF einseitig schwarz 1200 × 600 × 3 (Art. 6617871) | 1 | 2 Rückwände ca. 306 × 336 |
+
+**toom:** Spanplatte melaminbeschichtet schwarz 16 mm (Art. 7100714, Zuschnitt) für 4 Böden 258 × 240 und Einlegeboden 248 × 206.
 
 **Andere Shops:** MOVENTO 760H2501T/2500T (4 Paar), Kupplung T51.7601 (4 Paar), Häfele 290.09.910 (1), Neodym 20 × 5 + Stahlscheibe Ø 20, Flachdübel Gr. 20, ABS-Kante schwarz 23 × 2 (ca. 3 m, im Betrieb fragen), Holzdübel 8 × 35 und 6 × 30, Schrauben, Möbelöl.
 
 ## Zeichnungen (Schulvorgaben)
+- Endzeichnung: `TopSecret_Endzeichnung.dxf` (Modell 1:1, Layouts Blatt 1–3).
 - Entwurfsabnahme 18.12.2026: Perspektive von Hand, 3 Ansichten **1:10**, mind. 2 Details **1:1** (bewegliches Bauteil + Fingerzinken), Stempel/Unterschrift Betrieb.
 - Fertigungszeichnung: Ansichten 1:5 oder 1:10, **alle Schnitte 1:1**.
 - Offen: Name, Klasse, Ausbildungsbetrieb fürs Schriftfeld.
